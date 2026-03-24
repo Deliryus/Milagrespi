@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Néliton Milagres (Pi) | Personal Trainer</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&family=Playfair+Display:ital@1&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --black: #0a0a0a;
+      --dark: #111111;
+      --card: #161616;
+      --gold: #c9a84c;
+      --gold-light: #e8c97a;
+      --gold-dim: rgba(201,168,76,0.15);
+      --white: #f5f0e8;
+      --gray: #888;
+      --radius: 16px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background-color: var(--black);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* ── NOISE TEXTURE OVERLAY ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 0;
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 60px 24px 80px;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(ellipse, rgba(201,168,76,0.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-badge {
+      display: inline-block;
+      border: 1px solid var(--gold);
+      color: var(--gold);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 100px;
+      margin-bottom: 32px;
+      animation: fadeDown 0.8s ease both;
+    }
+
+    .hero-photo-wrap {
+      position: relative;
+      width: 140px; height: 140px;
+      margin: 0 auto 32px;
+      animation: fadeDown 0.9s ease 0.1s both;
+    }
+
+    .hero-photo-wrap::before {
+      content: '';
+      position: absolute;
+      inset: -4px;
+      border-radius: 50%;
+      background: conic-gradient(var(--gold), var(--gold-light), transparent, var(--gold));
+      animation: spin 6s linear infinite;
+    }
+
+    .hero-photo {
+      position: relative;
+      width: 100%; height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--black);
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    .hero-photo img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    .photo-placeholder {
+      font-size: 52px;
+      line-height: 1;
+    }
+
+    .hero-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(52px, 12vw, 96px);
+      letter-spacing: 4px;
+      line-height: 0.95;
+      color: var(--white);
+      animation: fadeUp 0.9s ease 0.2s both;
+    }
+
+    .hero-name span {
+      color: var(--gold);
+    }
+
+    .hero-slogan {
+      font-family: 'Playfair Display', serif;
+      font-style: italic;
+      font-size: clamp(16px, 3.5vw, 22px);
+      color: var(--gold-light);
+      margin-top: 12px;
+      margin-bottom: 28px;
+      opacity: 0.9;
+      animation: fadeUp 0.9s ease 0.35s both;
+    }
+
+    .hero-desc {
+      max-width: 480px;
+      font-size: 15px;
+      color: #aaa;
+      margin: 0 auto 40px;
+      animation: fadeUp 0.9s ease 0.45s both;
+    }
+
+    .hero-cta {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      flex-wrap: wrap;
+      animation: fadeUp 0.9s ease 0.55s both;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--gold);
+      color: var(--black);
+      font-weight: 700;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 14px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1.5px solid var(--gold);
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 14px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 13px 28px;
+      border-radius: 100px;
+      text-decoration: none;
+      transition: background 0.25s, transform 0.2s;
+    }
+
+    .btn-outline:hover { background: var(--gold-dim); transform: translateY(-2px); }
+
+    .scroll-hint {
+      position: absolute;
+      bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      color: var(--gray);
+      font-size: 11px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      animation: fadeUp 1s ease 1s both;
+    }
+
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--gold), transparent);
+      animation: scrollPulse 2s ease infinite;
+    }
+
+    /* ── SECTION BASE ── */
+    section {
+      position: relative;
+      z-index: 1;
+      padding: 80px 24px;
+    }
+
+    .container {
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(36px, 7vw, 58px);
+      letter-spacing: 2px;
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 20px;
+    }
+
+    /* ── SOBRE MIM ── */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+      margin-top: 40px;
+    }
+
+    @media (max-width: 600px) {
+      .about-grid { grid-template-columns: 1fr; }
+    }
+
+    .about-card {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+
+    .about-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .about-icon {
+      font-size: 36px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .about-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .about-card p {
+      font-size: 13.5px;
+      color: #999;
+      line-height: 1.55;
+    }
+
+    /* ── DIVIDER ── */
+    .gold-divider {
+      border: none;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--gold), transparent);
+      margin: 0 auto;
+      max-width: 600px;
+      opacity: 0.4;
+    }
+
+    /* ── PLANOS ── */
+    .plans-tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      background: var(--card);
+      border: 1.5px solid rgba(201,168,76,0.2);
+      color: #999;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      padding: 10px 20px;
+      border-radius: 100px;
+      cursor: pointer;
+      transition: all 0.25s;
+      font-family: 'DM Sans', sans-serif;
+    }
+
+    .tab-btn.active, .tab-btn:hover {
+      background: var(--gold);
+      color: var(--black);
+      border-color: var(--gold);
+    }
+
+    .plans-panel { display: none; }
+    .plans-panel.active { display: block; }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+    }
+
+    .plan-card {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.12);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      position: relative;
+      transition: border-color 0.3s, transform 0.3s;
+      overflow: hidden;
+    }
+
+    .plan-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(to right, var(--gold), var(--gold-light));
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .plan-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-4px);
+    }
+
+    .plan-card:hover::before { opacity: 1; }
+
+    .plan-card.highlight {
+      border-color: var(--gold);
+      background: linear-gradient(135deg, #1a1600 0%, var(--card) 100%);
+    }
+
+    .plan-card.highlight::before { opacity: 1; }
+
+    .plan-badge {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 14px;
+    }
+
+    .plan-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 26px;
+      letter-spacing: 1px;
+      color: var(--white);
+      margin-bottom: 4px;
+    }
+
+    .plan-freq {
+      font-size: 13px;
+      color: var(--gray);
+      margin-bottom: 16px;
+    }
+
+    .plan-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 42px;
+      letter-spacing: 1px;
+      color: var(--gold);
+      line-height: 1;
+    }
+
+    .plan-price sub {
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--gray);
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    .plan-per-class {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 4px;
+      margin-bottom: 16px;
+    }
+
+    .plan-divider {
+      border: none;
+      height: 1px;
+      background: rgba(201,168,76,0.15);
+      margin: 16px 0;
+    }
+
+    .plan-includes {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .plan-includes li {
+      font-size: 13px;
+      color: #bbb;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    .plan-includes li::before {
+      content: '✓';
+      color: var(--gold);
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── ONLINE CARD ── */
+    .online-section {
+      background: linear-gradient(135deg, #0f0d00 0%, #111111 100%);
+      border: 1px solid rgba(201,168,76,0.25);
+      border-radius: 20px;
+      padding: 40px;
+      margin-top: 32px;
+    }
+
+    .online-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 540px) {
+      .online-grid { grid-template-columns: 1fr; }
+      .online-section { padding: 28px 20px; }
+    }
+
+    .online-price-card {
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .online-price-card h4 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 20px;
+      letter-spacing: 1px;
+      color: var(--gold);
+      margin-bottom: 8px;
+    }
+
+    .online-price-card .big-price {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 38px;
+      color: var(--white);
+    }
+
+    .online-price-card .price-detail {
+      font-size: 12px;
+      color: var(--gray);
+      margin-top: 2px;
+    }
+
+    .includes-list {
+      list-style: none;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    @media (max-width: 540px) {
+      .includes-list { grid-template-columns: 1fr; }
+    }
+
+    .includes-list li {
+      font-size: 13.5px;
+      color: #bbb;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .includes-list li span.icon {
+      flex-shrink: 0;
+      font-size: 15px;
+    }
+
+    /* ── CONTACT ── */
+    .contact-section {
+      text-align: center;
+    }
+
+    .contact-cards {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 36px;
+    }
+
+    .contact-card {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      background: var(--card);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      text-decoration: none;
+      color: var(--white);
+      transition: border-color 0.3s, transform 0.3s;
+      min-width: 220px;
+    }
+
+    .contact-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-3px);
+    }
+
+    .contact-icon {
+      font-size: 28px;
+    }
+
+    .contact-info small {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 3px;
+    }
+
+    .contact-info strong {
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 32px 24px;
+      font-size: 12px;
+      color: #444;
+      border-top: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      z-index: 1;
+    }
+
+    footer span { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+      50%       { opacity: 1;   transform: scaleY(1); }
+    }
+
+    /* ── REVEAL ON SCROLL ── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════ HERO ══════════ -->
+<section class="hero">
+  <div class="hero-badge">Personal Trainer Certificado</div>
+
+  <div class="hero-photo-wrap">
+    <div class="hero-photo">
+      <!-- SUBSTITUA A LINHA ABAIXO PELA SUA FOTO:
+           <img src="sua-foto.jpg" alt="Néliton Milagres">
+           Instruções completas no final da página -->
+      <span class="photo-placeholder">🏋️</span>
+    </div>
+  </div>
+
+  <h1 class="hero-name">Néliton<br><span>Milagres</span></h1>
+  <p class="hero-slogan">"Seu corpo é capaz. Eu te mostro o caminho."</p>
+  <p class="hero-desc">
+    Especialista em emagrecimento, hipertrofia e preparação esportiva — adulto e infantil.
+    Treinos personalizados para resultados reais.
+  </p>
+
+  <div class="hero-cta">
+    <a href="https://wa.me/5531975023562?text=Ol%C3%A1%20N%C3%A9liton!%20Vi%20seu%20perfil%20e%20quero%20saber%20mais%20sobre%20o%20personal." target="_blank" class="btn-primary">
+      💬 Falar no WhatsApp
+    </a>
+    <a href="#planos" class="btn-outline">Ver planos</a>
+  </div>
+
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    scroll
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- ══════════ SOBRE ══════════ -->
+<section id="sobre">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Sobre mim</p>
+      <h2 class="section-title">Quem é o Pi?</h2>
+      <p style="color:#aaa; max-width:560px; font-size:15px;">
+        Sou o Néliton, o Pi — personal trainer apaixonado por transformar vidas através do movimento.
+        Trabalho de forma 100% individualizada, seja presencialmente ou online,
+        sempre com foco nos seus objetivos e no seu ritmo.
+      </p>
+    </div>
+
+    <div class="about-grid" style="margin-top:40px;">
+      <div class="about-card reveal">
+        <span class="about-icon">🔥</span>
+        <h3>Emagrecimento</h3>
+        <p>Protocolos eficientes para perda de gordura com saúde e sem sofrimento.</p>
+      </div>
+      <div class="about-card reveal">
+        <span class="about-icon">💪</span>
+        <h3>Hipertrofia</h3>
+        <p>Ganho de massa muscular com periodização inteligente e acompanhamento próximo.</p>
+      </div>
+      <div class="about-card reveal">
+        <span class="about-icon">⚽</span>
+        <h3>Prep. Esportiva</h3>
+        <p>Preparação física para esportes, adultos e crianças, com metodologia especializada.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- ══════════ PLANOS ══════════ -->
+<section id="planos">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Investimento</p>
+      <h2 class="section-title">Planos & Valores</h2>
+      <p style="color:#aaa; font-size:14px; margin-bottom:28px;">Hora/aula avulsa: <strong style="color:var(--gold)">R$ 90,00</strong></p>
+    </div>
+
+    <!-- TABS -->
+    <div class="plans-tabs reveal">
+      <button class="tab-btn active" onclick="switchTab('individual')">🏋️ Individual</button>
+      <button class="tab-btn" onclick="switchTab('dupla')">👭 Dupla</button>
+      <button class="tab-btn" onclick="switchTab('online')">📱 Online</button>
+    </div>
+
+    <!-- INDIVIDUAL -->
+    <div class="plans-panel active" id="tab-individual">
+      <div class="plans-grid">
+        <div class="plan-card reveal">
+          <div class="plan-name">Mensal</div>
+          <div class="plan-freq">2x por semana</div>
+          <div class="plan-price">R$ 680<sub>/mês</sub></div>
+          <div class="plan-per-class">R$ 85 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~8 aulas no mês</li>
+            <li>Treino 100% personalizado</li>
+            <li>Acompanhamento próximo</li>
+          </ul>
+        </div>
+
+        <div class="plan-card reveal">
+          <div class="plan-name">Mensal</div>
+          <div class="plan-freq">3x por semana</div>
+          <div class="plan-price">R$ 960<sub>/mês</sub></div>
+          <div class="plan-per-class">R$ 80 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~12 aulas no mês</li>
+            <li>Treino 100% personalizado</li>
+            <li>Acompanhamento próximo</li>
+          </ul>
+        </div>
+
+        <div class="plan-card highlight reveal">
+          <div class="plan-badge">⭐ Melhor custo-benefício</div>
+          <div class="plan-name">Trimestral</div>
+          <div class="plan-freq">2x por semana</div>
+          <div class="plan-price">R$ 640<sub>/mês</sub></div>
+          <div class="plan-per-class">3× R$ 640 · R$ 80 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~24 aulas em 3 meses</li>
+            <li>Treino 100% personalizado</li>
+            <li>Melhor resultado no longo prazo</li>
+          </ul>
+        </div>
+
+        <div class="plan-card highlight reveal">
+          <div class="plan-badge">⭐ Melhor custo-benefício</div>
+          <div class="plan-name">Trimestral</div>
+          <div class="plan-freq">3x por semana</div>
+          <div class="plan-price">R$ 900<sub>/mês</sub></div>
+          <div class="plan-per-class">3× R$ 900 · R$ 75 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~36 aulas em 3 meses</li>
+            <li>Treino 100% personalizado</li>
+            <li>Máxima evolução e consistência</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- DUPLA -->
+    <div class="plans-panel" id="tab-dupla">
+      <p style="color:#888; font-size:13px; margin-bottom:24px;">💡 Valores por pessoa — treine com um amigo e economize!</p>
+      <div class="plans-grid">
+        <div class="plan-card reveal">
+          <div class="plan-name">Mensal</div>
+          <div class="plan-freq">2x por semana</div>
+          <div class="plan-price">R$ 600<sub>/mês</sub></div>
+          <div class="plan-per-class">R$ 75 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~8 aulas no mês</li>
+            <li>Treino em dupla</li>
+            <li>Valor por pessoa</li>
+          </ul>
+        </div>
+
+        <div class="plan-card reveal">
+          <div class="plan-name">Mensal</div>
+          <div class="plan-freq">3x por semana</div>
+          <div class="plan-price">R$ 840<sub>/mês</sub></div>
+          <div class="plan-per-class">R$ 70 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~12 aulas no mês</li>
+            <li>Treino em dupla</li>
+            <li>Valor por pessoa</li>
+          </ul>
+        </div>
+
+        <div class="plan-card highlight reveal">
+          <div class="plan-badge">⭐ Melhor custo-benefício</div>
+          <div class="plan-name">Trimestral</div>
+          <div class="plan-freq">2x por semana</div>
+          <div class="plan-price">R$ 560<sub>/mês</sub></div>
+          <div class="plan-per-class">3× R$ 560 · R$ 70 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~24 aulas em 3 meses</li>
+            <li>Treino em dupla</li>
+            <li>Valor por pessoa</li>
+          </ul>
+        </div>
+
+        <div class="plan-card highlight reveal">
+          <div class="plan-badge">⭐ Melhor custo-benefício</div>
+          <div class="plan-name">Trimestral</div>
+          <div class="plan-freq">3x por semana</div>
+          <div class="plan-price">R$ 780<sub>/mês</sub></div>
+          <div class="plan-per-class">3× R$ 780 · R$ 65 por aula</div>
+          <hr class="plan-divider">
+          <ul class="plan-includes">
+            <li>~36 aulas em 3 meses</li>
+            <li>Treino em dupla</li>
+            <li>Valor por pessoa</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONLINE -->
+    <div class="plans-panel" id="tab-online">
+      <div class="online-section reveal">
+        <p class="section-label" style="margin-bottom:8px;">Consultoria Online</p>
+        <h3 style="font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:1px; color:var(--white);">Onde você estiver</h3>
+        <p style="color:#999; font-size:14px; margin-top:8px;">Treinos profissionais direto no seu celular, com o mesmo cuidado do presencial.</p>
+
+        <div class="online-grid">
+          <div class="online-price-card">
+            <h4>Mensal</h4>
+            <div class="big-price">R$ 200</div>
+            <div class="price-detail">pagamento único</div>
+          </div>
+          <div class="online-price-card" style="border-color:var(--gold);">
+            <h4>Trimestral ⭐</h4>
+            <div class="big-price">R$ 150</div>
+            <div class="price-detail">3× R$ 150 · economia de R$ 150</div>
+          </div>
+        </div>
+
+        <hr class="plan-divider" style="margin: 28px 0;">
+        <p style="font-size:12px; letter-spacing:3px; text-transform:uppercase; color:var(--gold); margin-bottom:16px;">O que está incluso</p>
+
+        <ul class="includes-list">
+          <li><span class="icon">📲</span> Planejamento completo no App MFit com vídeos</li>
+          <li><span class="icon">📋</span> Anamnese e avaliação inicial completa</li>
+          <li><span class="icon">💬</span> Suporte direto via WhatsApp para dúvidas</li>
+          <li><span class="icon">🔄</span> Atualização periódica dos treinos</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="gold-divider">
+
+<!-- ══════════ CONTATO ══════════ -->
+<section id="contato" class="contact-section">
+  <div class="container">
+    <div class="reveal">
+      <p class="section-label">Bora começar?</p>
+      <h2 class="section-title">Fale comigo</h2>
+      <p style="color:#aaa; font-size:15px; max-width:440px; margin: 0 auto 8px;">
+        Tire suas dúvidas, escolha seu plano e dê o primeiro passo rumo à sua transformação.
+      </p>
+    </div>
+
+    <div class="contact-cards">
+      <a href="https://wa.me/5531975023562?text=Ol%C3%A1%20N%C3%A9liton!%20Vi%20seu%20perfil%20e%20quero%20saber%20mais%20sobre%20o%20personal." target="_blank" class="contact-card reveal">
+        <span class="contact-icon">💬</span>
+        <div class="contact-info">
+          <small>WhatsApp</small>
+          <strong>(31) 97502-3562</strong>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/milagrespi" target="_blank" class="contact-card reveal">
+        <span class="contact-icon">📸</span>
+        <div class="contact-info">
+          <small>Instagram</small>
+          <strong>@milagrespi</strong>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <p>© 2025 <span>Néliton Milagres (Pi)</span> · Personal Trainer · Todos os direitos reservados</p>
+  <p style="margin-top:8px; font-size:11px;">Transforme seu corpo. Transforme sua vida. 💛</p>
+</footer>
+
+<script>
+  // ── Tab switching ──
+  function switchTab(id) {
+    document.querySelectorAll('.plans-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+  }
+
+  // ── Scroll reveal ──
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 80);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
